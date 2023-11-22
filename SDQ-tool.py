@@ -24,6 +24,7 @@ if args.start > args.end:
 #%%
 df = pd.read_csv('master-data/master-data.txt', delimiter='\t', header=0)
 dates = df['Date'].values; mjds = df['MJD'].values; densities = df['Densities (cm^3)'].values
+mask = densities > 0; dates = dates[mask]; mjds = mjds[mask]; densities = densities[mask]
 
 if args.start < mjds[0] or args.end > mjds[-1]:
     raise ValueError('Start MJD must be greater than %s and end MJD must be less than %s.' % (mjds[0], mjds[-1]))
@@ -44,7 +45,7 @@ print('Number of data points: ', len(proton_density))
 
 # --- Save Values to .txt file ---
 data = np.column_stack((mjd_times, proton_density))
-np.savetxt('output-data/DSCOVR-data-%s-%s.txt' % (args.start, args.end), data, fmt=['%.6f', '%.2f'], delimiter='\t', header='MJD\tDensities (cm^3)')
+np.savetxt('output-data/SDQ-data-%s-%s.txt' % (args.start, args.end), data, fmt=['%.6f', '%.2f'], delimiter='\t', header='MJD\tDensities (cm^3)')
 
 if args.plot == True:
     import matplotlib.pyplot as plt
@@ -63,4 +64,4 @@ if args.plot == True:
     plt.ylabel('Density (cm$^{-3}$)'); plt.xlabel('Time (hours)')
     plt.legend()
     plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
-    plt.savefig('plots/DSCOVR-data-%s-%s.png' % (args.start, args.end))
+    plt.savefig('plots/SDQ-data-%s-%s.png' % (args.start, args.end))
