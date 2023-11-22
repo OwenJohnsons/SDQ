@@ -4,21 +4,31 @@ Code Purpose:
 Code Author: Owen A. Johnson 
 Date: 2023-11-20
 '''
+#%%
 import argparse
 import netCDF4 as nc
 from glob import glob
 import pandas as pd
-import datetime 
+from datetime import datetime, timedelta
 import numpy as np 
-
+#%% 
 parser = argparse.ArgumentParser(description='Plots Solar electron densitites for a given MJD range.')
 parser.add_argument('-s', '--start', type=float, help='Start MJD', required=True)
 parser.add_argument('-f', '--end', type=float, help='End MJD', required=True)
 parser.add_argument('-p', '--plot', action='store_true', help='Plot data (default = True)', default=True)
 args = parser.parse_args()
 
-df = pd.read_csv('DSCOVR-total-data.txt', delimiter='\t', header=0)
-dates = df['# Date'].values; mjds = df['MJD'].values; densities = df['Densities (cm^3)'].values
+if args.start > args.end:
+    raise ValueError('Start MJD must be less than end MJD.')
+
+#%%
+df = pd.read_csv('master-data/master-data.txt', delimiter='\t', header=0)
+dates = df['Date'].values; mjds = df['MJD'].values; densities = df['Densities (cm^3)'].values
+
+if args.start < mjds[0] or args.end > mjds[-1]:
+    raise ValueError('Start MJD must be greater than %s and end MJD must be less than %s.' % (mjds[0], mjds[-1]))
+
+#%% 
 
 def nearest_idx(val, array):
     idx = (np.abs(array - val)).argmin()
