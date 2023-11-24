@@ -1,7 +1,7 @@
 '''
 Code Author: Owen A. Johnson
 Date: 2023-11-20
-Code Purpose: 
+Code Purpose: Simple script to increment through a list of links and download them without overloading querying service. Also unpacks and then deltes compressed files aftewards. 
 '''
 #%%
 import os
@@ -13,7 +13,6 @@ lines = file.readlines()
 # find all strings with https
 links = lines[0].split(' ')
 print('Number of days to download: ', len(links))
-os.chdir('input-data')
 for link in tqdm(links):
     os.system('wget ' + link)
 print('Download complete.')

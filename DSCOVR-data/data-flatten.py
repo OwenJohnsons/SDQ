@@ -1,5 +1,5 @@
 '''
-Code Purpose: 
+Code Purpose: Extracts and flattens data from .nc files into a single .dat file.
 Code Author: Owen A. Johnson 
 Date: 2023-11-21
 '''
@@ -36,7 +36,7 @@ print('Number of negative data entries: ', len(densities[densities < 0]))
 
 # - Write to .dat file date, mjd and density -
 data = np.column_stack((dates, mjds, densities))
-np.savetxt('DSCOVR-total-data.txt', data, fmt=['%s', '%.6f', '%.2f'], delimiter='\t', header='Date\tMJD\tDensities (cm^3)')
+np.savetxt(('DSCOVR-total-data-%s.txt' % dates[-1]), data, fmt=['%s', '%.6f', '%.2f'], delimiter='\t', header='Date\tMJD\tDensities (cm^3)')
 print(f'Data has been merged and saved.')
 
 # %%
